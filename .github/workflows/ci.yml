@@ -1,0 +1,33 @@
+name: Continuous Integration Workflow
+
+# Trigger this workflow whenever a new PR is created on the main branch
+on: 
+    pull_request: 
+        branches: master
+
+# Set some defaults
+defaults:
+    run:
+        shell: bash
+        working-directory: ./
+        
+# Jobs run in parallel by default
+jobs:
+    lint:                                     
+        name: 'Run linter'                    
+        runs-on: ubuntu-latest                
+        steps:                                
+            - uses: actions/checkout@v4       
+              name: 'Checkout repository'
+              
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                node-version: 20
+                cache: 'yarn'  
+                                              
+            - name: 'Install Dependencies'    
+              run: yarn                     
+                                              
+            - name: 'Run linter'              
+              run: yarn lint     
